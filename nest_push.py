@@ -14,6 +14,23 @@ IFLX_USER = config['influx']['user']
 IFLX_PASS = config['influx']['pass']
 IFLX_DB = config['influx']['database']
 
+# Metrics to loop
+metrics = ['mode',
+           'fan',
+           'humidity',
+           'hvac_ac_state',
+           'hvac_cool_x2_state',
+           'hvac_heater_state',
+           'hvac_aux_heater_state',
+           'hvac_heat_x2_state',
+           'hvac_heat_x3_state',
+           'hvac_alt_heat_state',
+           'hvac_alt_heat_x2_state',
+           'hvac_emer_heat_state']
+
+metrics_convert = ['temperature',
+                   'target']
+
 
 def send_to_influx(metrics, host=IFLX_HOST, port=8086, user=IFLX_USER,
                    pwd=IFLX_PASS, db=IFLX_DB):
@@ -30,25 +47,18 @@ def gather_nest(u=USER, p=PASS):
         struct_name = structure.name
 
         for device in structure.devices:
-            data.append({'measurement': 'mode',
-                         'tags': {'structure': struct_name,
-                                  'device': device.name},
-                         'fields': {'value': device.mode}})
+            for m in metrics:
+                data.append({'measurement': m,
+                             'tags': {'structure': struct_name,
+                                      'device': device.name},
+                             'fields': {'value': getattr(device, m)}})
 
-            data.append({'measurement': 'temperature',
-                         'tags': {'structure': struct_name,
-                                  'device': device.name},
-                         'fields': {'value': nu.c_to_f(device.temperature)}})
-
-            data.append({'measurement': 'target',
-                         'tags': {'structure': struct_name,
-                                  'device': device.name},
-                         'fields': {'value': nu.c_to_f(device.target)}})
-
-            data.append({'measurement': 'humidity',
-                         'tags': {'structure': struct_name,
-                                  'device': device.name},
-                         'fields': {'value': device.humidity}})
+            for m in metrics_convert:
+                data.append({'measurement': m,
+                             'tags': {'structure': struct_name,
+                                      'device': device.name},
+                             'fields': {'value':
+                                        nu.c_to_f(getattr(device, m))}})
 
         t = nu.c_to_f(structure.weather.current.temperature)
         data.append({'measurement': 'temperature',
