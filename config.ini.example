@@ -1,0 +1,9 @@
+[nest]
+user = user@email.com
+pass = lolpassword
+
+[influx]
+host = 127.0.0.1
+user = influx
+pass = password
+database = nest
