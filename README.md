@@ -1,6 +1,16 @@
 # nest_influx
 Push Nest to influxdb
 
+Changes to Original Version:
+- Made compatible with "Range" mode (setting simultaneous high and low temp targets)
+- Made Fahrenheit conversion configurable: default is to convert to F, changing "convert_to_Fahrentheit" to False in config.ini will keep measurements in Celsius
+- Added comments to explain functionality
+- Commented out unnecessary(?) metrics, currently only records mode, fan, humidity, hvac_ac_state, temperature, target (AC), and target_heat (heat). Thesee can be re-activated by uncommenting the line in nest_push.py.
+
+A new sample Grafana xml has not yet been generated, but target_heat can now be used to show the heat target as a discrete measurement (target_heat), while AC target remains as its own measurement (target). For example, if "range" mode is used, Grafana can show the high and low setpoints simultaneously.
+
+
+Original Version:
 Iterates through all structures and devices to create the following metrics:
 
 * mode

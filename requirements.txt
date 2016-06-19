@@ -1,3 +1,4 @@
 configobj
 influxdb
 python-nest
+validate
