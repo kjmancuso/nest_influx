@@ -1,7 +1,7 @@
 # nest_influx
 Push Nest to influxdb
 
-Modified from https://github.com/kremlinkev/nest_influx
+Modified from original version by https://github.com/kremlinkev/nest_influx
 
 ###Changes to Original Version:
 - Made compatible with "Range" mode (setting simultaneous high and low temp targets)
